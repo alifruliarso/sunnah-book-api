@@ -1,0 +1,21 @@
+- host: localhost
+  tasks:
+   - name: add apt repository
+     apt_repository:
+      repo: 'ppa:gophers/go'
+      state: present
+      update_cache: yes 
+    
+   - name : Install go lang
+     apt:
+      pkg: "{{ item }}"
+      state: installed
+      with_item: 
+  	- golang-stable
+    	- mysql-server
+      notify:
+        - start mysql
+   
+  handlers:
+   - name: start mysql
+     service: name=mysqld state=started
